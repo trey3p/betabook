@@ -25,10 +25,15 @@ SECRET_KEY = 'django-insecure-gk0l-y_mgu)o-&t3-r6yofiw0syn^knou2kg^q624(aia^gz88
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0']
 
 
 # Application definition
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,7 +42,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'accounts',
+    'corsheaders'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -47,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'betaBackend.urls'
@@ -66,6 +88,18 @@ TEMPLATES = [
         },
     },
 ]
+
+DJOSER = {
+    'USER_ID_FIELD': 'username',
+    'LOGIN_FIELD': 'email',
+    'SEND_ACTIVATION_EMAIL': True,
+    'ACTIVATION_URL':'activate/{uid}/{token}',
+    'SERIALIZERS': {
+        'token_create': 'accounts.serializers.CustomTokenCreateSerializer',
+    },
+}
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_NAME = 'betabook'
 
 WSGI_APPLICATION = 'betaBackend.wsgi.application'
 
