@@ -87,6 +87,11 @@ export default function LoginPage() {
             title="Submit"
             color = "#841584"
           />
+          <Button
+            onPress={() => setSignUpModalVisible(!signUpModalVisible)}
+            title="Back"
+            color = "#841584"
+          />
         </View>
       </Modal>
       <TouchableOpacity 

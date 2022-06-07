@@ -95,13 +95,13 @@ export default function App({navigation}) {
             if (errorData){
               errorData = errorData[0]
               if (errorData == 'Unable to log in with provided credentials.'){
-                Alert.alert({title:'Invalid login credentials'})
+                Alert.alert('Invalid login credentials', '', [{text:'Ok'}])
                 
                 console.log('Unable to log in with provided credentials');
 
               }
               else if(errorData == 'user is not active'){
-                Alert.alert({title:"You must confirm your account via email before you are able to login!"})
+                Alert.alert("You must confirm your account via email before you are able to login!",'', [{text: 'Ok'}])
                 console.log('Please confirm your account via email.ß')
 
               }
@@ -121,8 +121,57 @@ export default function App({navigation}) {
     signOut: () => dispatch({type: 'SIGN_OUT'})
     ,
     signUp: async (data) => {
-      console.log("Sign up not implemented yet");
-      dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+      
+      let email = data.email;
+      let username = data.username;
+      let password = data.password;
+
+      fetch('http://127.0.0.1:8000/api/users/',{
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            username: username,
+          }),
+          }
+        ).then(res => res.json())
+        .then((json) => 
+          {
+            let usernameErrorData = json['username'];
+            let emailErrorData = json['email'];
+            
+
+            if(usernameErrorData)
+            {
+              usernameErrorData = usernameErrorData[0]
+              Alert.alert(usernameErrorData,
+              '', [{text: 'Ok'}]);
+              
+            }
+            else if(emailErrorData)
+            {
+              //console.log(emailErrorData);
+              emailErrorData = emailErrorData[0];
+              Alert.alert(emailErrorData, '', [{text: 'Ok'}]);
+              
+            }
+
+            let authToken = json['auth']
+            
+            if(authToken)
+            {
+              authToken = authToken[0]
+              Alert.alert("Account created! PLease confirm your account via email, then sign in!",
+              '', [{text: 'Ok'}]);
+              dispatch({type: 'SIGN_OUT'})
+            }
+
+            
+          })
     }
   }),
   [state]
