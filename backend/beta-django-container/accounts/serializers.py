@@ -2,6 +2,7 @@
 from django.contrib.auth import authenticate, get_user_model
 from djoser.conf import settings
 from djoser.serializers import TokenCreateSerializer
+from rest_framework.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -18,7 +19,8 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
             if self.user and not self.user.check_password(password):
                 self.fail('invalid_credentials')
 
-        if self.user:
+        if self.user and not self.user.is_active:
+            raise ValidationError("user is not active") # message that the user is not active
+        elif self.user and self.user.is_active:
             return attrs
-
-        self.fail('invalid_credentials')
+        self.fail("invalid_credentials")
