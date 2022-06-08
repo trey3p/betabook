@@ -9,11 +9,11 @@ const Stack = createStackNavigator();
 
 export const AuthContext = React.createContext();
 
-import SecureStore from 'expo-secure-store';
+import * as SecureStore from 'expo-secure-store';
 import SplashScreen from './components/SplashScreen';
 import LoginPage from './components/Login/loginPage';
 import Home from './components/Explore/Home';
-import { useEffect } from 'react/cjs/react.production.min';
+
 
 export default function App({navigation}) {
 
@@ -89,11 +89,16 @@ export default function App({navigation}) {
           }),
           }
         ).then(res => res.json())
-        .then((json) => 
+        .then(async (json) => 
           {
+            
             let errorData = json['non_field_errors'];
+            let authToken = await json['auth_token'];
+            //console.log(errorData);
             if (errorData){
-              errorData = errorData[0]
+              
+              errorData = errorData[0];
+              
               if (errorData == 'Unable to log in with provided credentials.'){
                 Alert.alert('Invalid login credentials', '', [{text:'Ok'}])
                 
@@ -105,16 +110,21 @@ export default function App({navigation}) {
                 console.log('Please confirm your account via email.ß')
 
               }
-
-              let authToken = json['auth'];
-
-              if(authToken) 
+            }
+            else if(authToken) 
               {
-                authToken = authToken[0]
-                SecureStore.setItemAsync('userToken', authData)
+                console.log(authToken);
+                
+                try{
+                  setItemPromise = await SecureStore.setItemAsync('userToken', String(authToken));
+                }
+                catch(e)
+                {
+                  console.log(e)
+                }
                 dispatch({type: 'SIGN_IN', token: authToken})
               }
-            }
+            
           }
         )
     },
