@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Text, ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-
+import {Text, ScrollView, StyleSheet, View, Dimensions, Image} from 'react-native';
+import { Card } from 'react-native-ui-lib';
 import { Video } from 'expo-av';
 
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
@@ -32,22 +32,31 @@ export default function Home() {
 
   
   return (
-    <>
-      <Text>Home</Text>
-      <Video
-        ref={video}
-        source={{uri: videoString + '.mp4'}}
-        resizeMode="contain"
-        style={{ width, height: 300, justifyContent: 'center', marginTop: 200}}
-        shouldPlay = {true}
-        volume = {.5}
-        useNativeControls = {true}
-      />
 
-    </>
+    <View style={styles.container}>
+       <Image style = {styles.image} source = {require("../../assets/betabook-logo.png")}/>
+        <Card style={styles.exploreCard}>
+          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Section
+            content={[{text: 'Explore Climbs!', text70: true, grey10: true}]}
+            contentStyle={{alignItems: 'center'}}
+            
+          />
+        </Card>
+        <Card style={styles.geoCard}>
+          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Section
+            content={[{text: 'Climbs near you!', text70: true, grey10: true}]}
+            contentStyle={{alignItems: 'center'}}
+            
+          />
+        </Card>
+      
+    </View>
+    
 
   )
-}
+};
 
 
 const styles = StyleSheet.create({
@@ -56,5 +65,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row'
   },
-})
+  image: {
+    position: 'absolute',
+    top: 60,
+    
+    
+  },
+  exploreCard: {
+    marginRight: 10,
+    bottom: 70
+    
+    
+  },
+  geoCard: {
+   marginLeft: 10,
+   bottom: 70
+  }
+});
+
