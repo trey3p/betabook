@@ -6,8 +6,6 @@ import { Video } from 'expo-av';
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { firebaseApp } from '../../fireStorage/storageAPI';
 
-
-
 // Get a reference to the storage service, which is used to create references in your storage bucket
 const storage = getStorage(firebaseApp);
 
@@ -34,19 +32,19 @@ export default function Home() {
 
   
   return (
-    <View style = {styles.container}>
+    <>
       <Text>Home</Text>
       <Video
         ref={video}
         source={{uri: videoString + '.mp4'}}
         resizeMode="contain"
-        style={{ width, height: 300 }}
+        style={{ width, height: 300, justifyContent: 'center', marginTop: 200}}
         shouldPlay = {true}
         volume = {.5}
-        
-
+        useNativeControls = {true}
       />
-    </View>
+
+    </>
 
   )
 }

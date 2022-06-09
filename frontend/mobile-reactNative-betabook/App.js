@@ -13,7 +13,7 @@ import * as SecureStore from 'expo-secure-store';
 import SplashScreen from './components/SplashScreen';
 import LoginPage from './components/Login/loginPage';
 import Home from './components/Explore/Home';
-
+import Navbar from './components/Navbar/Navbar';
 
 export default function App({navigation}) {
 
@@ -60,7 +60,7 @@ export default function App({navigation}) {
         // Restoring token failed
         console.log("RESTORE TOKEN FAILED")
       }
-
+      console.log('hi')
       // After restoring token, we may need to validate it in production apps
 
       // This will switch to the App screen or Auth screen and this loading
@@ -212,8 +212,8 @@ export default function App({navigation}) {
          ) : 
          (
             <Stack.Screen
-            name="Home"
-            component={Home}
+            name="Navbar"
+            component={Navbar}
             />
          )
         }
