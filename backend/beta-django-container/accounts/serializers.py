@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, get_user_model
 from djoser.conf import settings
 from djoser.serializers import TokenCreateSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework import serializers
+from .models import Post, Comment
 
 User = get_user_model()
 
@@ -24,3 +26,9 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
         elif self.user and self.user.is_active:
             return attrs
         self.fail("invalid_credentials")
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('title', 'slug', 'bodytext')

@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from djoser.views import UserViewSet
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
+from .models import Post, Comment
+
+from .serializers import PostSerializer
 
 class ActivateUser(UserViewSet):
     def get_serializer(self, *args, **kwargs):
@@ -16,3 +19,14 @@ class ActivateUser(UserViewSet):
     def activation(self, request, uid, token, *args, **kwargs):
         super().activation(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class PostView(viewsets.ModelViewSet):
+    
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

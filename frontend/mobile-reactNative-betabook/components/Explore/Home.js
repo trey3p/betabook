@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, ScrollView, StyleSheet, View, Dimensions, Image} from 'react-native';
+import {Text, ScrollView, StyleSheet, View, Dimensions, Image, FlatList} from 'react-native';
 import { Card } from 'react-native-ui-lib';
 import { Video } from 'expo-av';
 
