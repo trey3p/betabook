@@ -4,7 +4,7 @@ from djoser.conf import settings
 from djoser.serializers import TokenCreateSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
-from .models import Post, Comment
+from .models import Post, Comment, Url
 
 User = get_user_model()
 
@@ -28,7 +28,14 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
         self.fail("invalid_credentials")
 
 
+class UrlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Url
+        fields = ('post', 'url')
+
+
 class PostSerializer(serializers.ModelSerializer):
+    urls = UrlSerializer(many = True)
     class Meta:
         model = Post
-        fields = ('title', 'slug', 'bodytext')
+        fields = ('title', 'slug', 'bodytext', 'post_id', 'urls')

@@ -11,6 +11,7 @@ from django.db.models.signals import post_save
 from six import python_2_unicode_compatible
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
+from .utilities import make_id
 
 User._meta.get_field('email')._unique = True
 User._meta.get_field('email').blank = False
@@ -22,6 +23,8 @@ from .signals import save_comment
 
 @python_2_unicode_compatible
 class Post(models.Model):
+    post_id = models.BigIntegerField(default = make_id, primary_key = True)
+
     title = models.CharField(max_length=200, verbose_name=_("title"))
     slug = models.SlugField()
     bodytext = models.TextField(verbose_name=_("message"))
