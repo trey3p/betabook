@@ -61,6 +61,12 @@ class Post(models.Model):
     title = models.CharField(max_length=200, verbose_name=_("title"))
     slug = models.SlugField()
     bodytext = models.TextField(verbose_name=_("message"))
+    grading = models.CharField(max_length = 10, default = '')
+    conditions = models.TextField(default = '')
+    beta = models.TextField(default = '')
+    rating = models.DecimalField(max_digits = 2, decimal_places = 1, blank = True, null = True)
+
+    
 
     post_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("post date"))
@@ -129,3 +135,10 @@ class Url(models.Model):
     url = models.URLField() 
     post = models.ForeignKey(Post, on_delete = models.CASCADE)
 
+class Video(models.Model):
+    url = models.URLField()
+    post = models.ForeignKey(Post, on_delete = models.CASCADE)
+
+class Photo(models.Model):
+    url = models.URLField()
+    post = models.ForeignKey(Post, on_delete = models.CASCADE)

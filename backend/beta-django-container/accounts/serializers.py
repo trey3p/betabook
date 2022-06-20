@@ -4,7 +4,7 @@ from djoser.conf import settings
 from djoser.serializers import TokenCreateSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
-from .models import Post, Comment, Url, Route, Area, State
+from .models import Post, Comment, Video, Photo, Route, Area, State
 
 User = get_user_model()
 
@@ -32,17 +32,23 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ('post', 'user', 'user_email', 'bodytext')
 
-class UrlSerializer(serializers.ModelSerializer):
+class VideoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Url
+        model = Video
         fields = ('post', 'url')
 
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = ('post', 'url')
 
 class PostSerializer(serializers.ModelSerializer):
-    urls = UrlSerializer(many = True, read_only = True)
+    videos = VideoSerializer(many = True, read_only = True)
+    photos = PhotoSerializer(many = True, read_only = True)
     class Meta:
         model = Post
-        fields = ('title', 'slug', 'bodytext', 'postID', 'urls', 'route')
+        fields = ('title', 'slug', 'bodytext', 'postID', 'urls', 'route',
+                 'grading','conditions','beta', 'rating')
 
 class RouteSerializer(serializers.ModelSerializer):
     posts = PostSerializer(many = True)

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from .models import Post, Comment, Area, State, Route
 
-from .serializers import PostSerializer, UrlSerializer, RouteSerializer, AreaSerializer, StateSerializer
+from .serializers import PostSerializer, RouteSerializer, AreaSerializer, StateSerializer, CommentSerializer
 
 class ActivateUser(UserViewSet):
     def get_serializer(self, *args, **kwargs):
@@ -35,7 +35,7 @@ class PostView(viewsets.ModelViewSet):
         return self.update(request, *args, **kwargs)
 
 class CommentView(viewsets.ModelViewSet):
-    serializer_class = UrlSerializer
+    serializer_class = CommentSerializer
     queryset = Post.objects.all()
 
     def get(self, request, *args, **kwargs):
