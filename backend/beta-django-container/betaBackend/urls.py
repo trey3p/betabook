@@ -23,6 +23,10 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 router.register(r'posts', views.PostView, 'post')
+router.register(r'comments',  views.CommentView, 'comment')
+router.register(r'routes', views.RouteView, 'route')
+router.register(r'areas', views.AreaView, 'area')
+router.register(r'state', views.StateView, 'state')
 
 
 urlpatterns = [

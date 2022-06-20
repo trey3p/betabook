@@ -2,9 +2,9 @@ from django.shortcuts import render
 from djoser.views import UserViewSet
 from rest_framework.response import Response
 from rest_framework import status, viewsets
-from .models import Post, Comment
+from .models import Post, Comment, Area, State, Route
 
-from .serializers import PostSerializer, UrlSerializer
+from .serializers import PostSerializer, UrlSerializer, RouteSerializer, AreaSerializer, StateSerializer
 
 class ActivateUser(UserViewSet):
     def get_serializer(self, *args, **kwargs):
@@ -31,6 +31,9 @@ class PostView(viewsets.ModelViewSet):
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+    def put(self, requests, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
 class CommentView(viewsets.ModelViewSet):
     serializer_class = UrlSerializer
     queryset = Post.objects.all()
@@ -40,3 +43,47 @@ class CommentView(viewsets.ModelViewSet):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+    def put(self, requests, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+class RouteView(viewsets.ModelViewSet):
+    serializer_class = RouteSerializer
+    queryset = Route.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+    def put(self, requests, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class AreaView(viewsets.ModelViewSet):
+    serializer_class = AreaSerializer
+    queryset = Area.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+    def put(self, requests, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+class StateView(viewsets.ModelViewSet):
+    serializer_class = StateSerializer
+    queryset = State.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, requests, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+

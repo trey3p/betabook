@@ -4,7 +4,7 @@ from djoser.conf import settings
 from djoser.serializers import TokenCreateSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
-from .models import Post, Comment, Url
+from .models import Post, Comment, Url, Route, Area, State
 
 User = get_user_model()
 
@@ -27,6 +27,10 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
             return attrs
         self.fail("invalid_credentials")
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('post', 'user', 'user_email', 'bodytext')
 
 class UrlSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,7 +39,31 @@ class UrlSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    urls = UrlSerializer(many = True)
+    urls = UrlSerializer(many = True, read_only = True)
     class Meta:
         model = Post
-        fields = ('title', 'slug', 'bodytext', 'post_id', 'urls')
+        fields = ('title', 'slug', 'bodytext', 'postID', 'urls', 'route')
+
+class RouteSerializer(serializers.ModelSerializer):
+    posts = PostSerializer(many = True)
+    class Meta:
+        model = Route
+        fields = ('name', 'avg_rating', 'long', 'lat', 'grade', 
+                'climbType', 'description', 'area', 'posts')
+
+class AreaSerializer(serializers.ModelSerializer):
+    routes =  RouteSerializer(many = True, read_only = True)
+    posts = PostSerializer(many = True)
+    class Meta:
+        model = Area
+        fields = ('name', 'areaID', 'state', 'long', 'lat',
+                'avg_rating', 'rockType', 'routes', 'posts')
+
+class StateSerializer(serializers.ModelSerializer):
+    routes = RouteSerializer(many = True) 
+    areas = AreaSerializer(many = True)
+    posts = PostSerializer(many = True)
+
+    class Meta:
+        model = State
+        fields = ('name', 'routes', 'areas', 'posts')

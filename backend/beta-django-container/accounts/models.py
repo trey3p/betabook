@@ -21,9 +21,42 @@ User._meta.get_field('email').null = False
 from .signals import save_comment
 
 
+class State(models.Model):
+    name = models.CharField(max_length = 200, primary_key = True)
+    
+
+class Area(models.Model):
+    #Routes included in view and serializer
+    name = models.CharField(max_length = 200)
+    areaID = models.BigIntegerField(default = hash(str(name)), primary_key = True)
+    state = models.ForeignKey(State, on_delete = models.CASCADE)
+    long = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
+    lat = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
+    avg_rating = models.DecimalField(max_digits = 2, decimal_places = 1, blank = True, null = True)
+    rockType = models.CharField(max_length = 200)
+
+class Route(models.Model):
+    #Posts included in view and serializer 
+    name = models.CharField(max_length = 200)
+    area = models.ForeignKey(Area, on_delete = models.CASCADE)
+    long = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
+    lat = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
+    avg_rating = models.DecimalField(max_digits = 2, decimal_places = 1, blank = True, null = True)
+    grade = models.CharField(max_length = 6)
+    routeID = models.BigIntegerField(default = hash(str(area) + str(name)), primary_key = True)
+    climbType = models.CharField(max_length = 20)
+    description = models.TextField(verbose_name = _('routeDescription'))
+
+
+
 @python_2_unicode_compatible
 class Post(models.Model):
-    post_id = models.BigIntegerField(default = make_id, primary_key = True)
+    # URLs included in serializer and view
+    postID = models.BigIntegerField(default = make_id, primary_key = True)
+
+    route = models.ForeignKey(Route, verbose_name = _("route"), on_delete = models.CASCADE)
+    area = models.ForeignKey(Area, verbose_name = _ ('area'), on_delete = models.CASCADE)
+    state = models.ForeignKey(State, verbose_name = _('state'), on_delete = models.CASCADE)
 
     title = models.CharField(max_length=200, verbose_name=_("title"))
     slug = models.SlugField()
@@ -93,9 +126,6 @@ post_save.connect(save_comment, sender=Comment)
 
 
 class Url(models.Model):
-    url = models.URLField()
+    url = models.URLField() 
     post = models.ForeignKey(Post, on_delete = models.CASCADE)
-
-
-
 
