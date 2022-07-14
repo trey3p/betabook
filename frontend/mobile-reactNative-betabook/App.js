@@ -128,7 +128,11 @@ export default function App({navigation}) {
           }
         )
     },
-    signOut: () => dispatch({type: 'SIGN_OUT'})
+    signOut: async (data) => {
+      deleteItemPromise = await SecureStore.deleteItemAsync('userToken')
+      dispatch({type: 'SIGN_OUT'})
+      
+    }
     ,
     signUp: async (data) => {
       
@@ -214,6 +218,7 @@ export default function App({navigation}) {
             <Stack.Screen
             name="Navbar"
             component={Navbar}
+            initialParams = {{userToken: state.userToken}}
             />
          )
         }

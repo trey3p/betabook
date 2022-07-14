@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0001_initial'),
+        ('accounts', '0003_alter_area_areaid_alter_route_routeid'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='area',
             name='areaID',
-            field=models.BigIntegerField(default=7412953863423723651, primary_key=True, serialize=False),
+            field=models.BigIntegerField(default=-6764050845552699077, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name='route',
             name='routeID',
-            field=models.BigIntegerField(default=-1054149789495694930, primary_key=True, serialize=False),
+            field=models.BigIntegerField(default=-262877338480639096, primary_key=True, serialize=False),
         ),
     ]

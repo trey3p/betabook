@@ -24,11 +24,13 @@ from .signals import save_comment
 class State(models.Model):
     name = models.CharField(max_length = 200, primary_key = True)
     
+    
 
 class Area(models.Model):
     #Routes included in view and serializer
     name = models.CharField(max_length = 200)
     areaID = models.BigIntegerField(default = hash(str(name)), primary_key = True)
+    
     state = models.ForeignKey(State, on_delete = models.CASCADE)
     long = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
     lat = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
@@ -37,16 +39,26 @@ class Area(models.Model):
 
 class Route(models.Model):
     #Posts included in view and serializer 
+    
     name = models.CharField(max_length = 200)
     area = models.ForeignKey(Area, on_delete = models.CASCADE)
     long = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
     lat = models.DecimalField(max_digits = 22, decimal_places = 16, blank = True, null = True)
     avg_rating = models.DecimalField(max_digits = 2, decimal_places = 1, blank = True, null = True)
     grade = models.CharField(max_length = 6)
-    routeID = models.BigIntegerField(default = hash(str(area) + str(name)), primary_key = True)
+    routeID = models.BigIntegerField(default = 9, primary_key = True)
     climbType = models.CharField(max_length = 20)
     description = models.TextField(verbose_name = _('routeDescription'))
 
+    def clean(self):
+        print(self.area)
+        self.routeID = hash(str(self.area) + str(self.name))
+        print(self.routeID)
+
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(Route, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible

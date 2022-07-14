@@ -9,8 +9,11 @@ const IMAGES = [
 ];
 
 
+import {AuthContext} from '../../App';
 
 export default function Profile() {
+
+  const {signOut}  = React.useContext(AuthContext);
   return (
     <View style={styles.container}>
       <Avatar style={styles.profilePicture} source = {{uri: 'https://www.rockandice.com/wp-content/uploads/2017/09/Alex-Megos-Ken-Etzel-photo.jpg'}} size={150} label={'Alex'} labelColor={'black'}/>
@@ -42,6 +45,7 @@ export default function Profile() {
             })}
           </Carousel>
           <Button style = {styles.settingsButton} label={'Settings'} size={Button.sizes.medium} backgroundColor={Colors.red30}/>
+          <Button style = {styles.settingsButton} label={'Sign Out'} size={Button.sizes.medium} backgroundColor={Colors.red30} onPress = {() => signOut()}/>
           
     </View>
   )

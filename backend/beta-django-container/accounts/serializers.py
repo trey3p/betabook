@@ -47,28 +47,26 @@ class PostSerializer(serializers.ModelSerializer):
     photos = PhotoSerializer(many = True, read_only = True)
     class Meta:
         model = Post
-        fields = ('title', 'slug', 'bodytext', 'postID', 'urls', 'route',
-                 'grading','conditions','beta', 'rating')
+        fields = ('title', 'slug', 'bodytext', 'postID', 'route',
+                 'grading','conditions','beta', 'rating', 'videos', 'photos')
 
 class RouteSerializer(serializers.ModelSerializer):
-    posts = PostSerializer(many = True)
     class Meta:
         model = Route
         fields = ('name', 'avg_rating', 'long', 'lat', 'grade', 
-                'climbType', 'description', 'area', 'posts')
+                'climbType', 'description', 'area', 'routeID')
 
 class AreaSerializer(serializers.ModelSerializer):
     routes =  RouteSerializer(many = True, read_only = True)
-    posts = PostSerializer(many = True)
+    posts = PostSerializer(many = True, read_only = True)
     class Meta:
         model = Area
         fields = ('name', 'areaID', 'state', 'long', 'lat',
                 'avg_rating', 'rockType', 'routes', 'posts')
 
 class StateSerializer(serializers.ModelSerializer):
-    routes = RouteSerializer(many = True) 
-    areas = AreaSerializer(many = True)
-    posts = PostSerializer(many = True)
+    routes = RouteSerializer(many = True, read_only = True) 
+    areas = AreaSerializer(many = True, read_only = True)
 
     class Meta:
         model = State

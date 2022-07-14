@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
+
 
 // Set the configuration for your app
 // TODO: Replace with your app's config object
