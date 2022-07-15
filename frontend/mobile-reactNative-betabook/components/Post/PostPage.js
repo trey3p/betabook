@@ -1,9 +1,9 @@
-import * as ImagePicker from "expo-image-picker";
+
 
 import React, { useState } from 'react';
 import {Text, View, StatusBar, ScrollView, SafeAreaView, TextInput, StyleSheet, Modal, FlatList} from 'react-native';
 
-//import { Picker } from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import {climbTypeOptions, climbGradeOptions, boulderGradeOptions} from '../Utilities/gradeTypeList';
 import SearchBar from "react-native-dynamic-search-bar";
 import { ScreenWidth } from "@freakycoder/react-native-helpers";
@@ -90,6 +90,7 @@ export default function Post({route, navigation}) {
   };
 
   function handleRouteSelection(item) {
+    setClimbType(item.climbType);
     setRouteSelected(item.routeID);
     setPostModalVisible(!postModalVisible)
   }
@@ -110,10 +111,6 @@ export default function Post({route, navigation}) {
     );
     };
 
-  async function uploadVideo() 
-  {
-
-  }
 
   function renderGrades() {
     if (climbType === 'Boulder'){
@@ -163,23 +160,46 @@ export default function Post({route, navigation}) {
           visible = {postModalVisible}
           onRequestClose = {() => setPostModalVisible(!postModalVisible)}
         >
-          <Ionicons style={styles.closeModal} name="close" size={32} color="black" onPress={() => setPostModalVisible(!postModalVisible)}/>
-          <TextInput
-              placeholder="Add a title!"
-              style = {styles.titleInput}
-          >
+          <ScrollView style={styles.scrollView}>
+            <Ionicons style={styles.closeModal} name="close" size={32} color="black" onPress={() => setPostModalVisible(!postModalVisible)}/>
+            <TextInput
+                placeholder="Add a title!"
+                style = {styles.titleInput}
+            >
 
-          </TextInput>
-          <TextInput
-            placeholder="Add your beta!"
-            style = {styles.bodyInput}
-            multiline={true}
-          >
+            </TextInput>
+            <TextInput
+              placeholder="Add your beta!"
+              style = {styles.bodyInput}
+              multiline={true}
+            >
 
-          </TextInput>
-          <MaterialIcons style = {styles.photoIcon} name="add-a-photo" size={32} color="black" />
-          <Ionicons style = {styles.videoIcon} name="videocam" size={32} color="black" />
+            </TextInput>
+            <Text style={styles.pickerTitle}>Grade</Text>
+            <Picker
+            style={{marginTop: 0}}
+            selectedValue = {grade}
+            
+            
+            onValueChange={(value, index) => setGrade(value)}
+            
+            >
+              {
+                renderGrades()
+              }
+            </Picker>
+            
+              <View style = {styles.buttonContainer}>
+                <MaterialIcons style = {styles.photoIcon} name="add-a-photo" size={27} color="black" />
+                <Ionicons style = {styles.videoIcon} name="videocam" size={32} color="black" />
+                <Ionicons style = {styles.linkIcon} name="link" size={32} color="black" />
+              </View>
+            
+            
+          </ScrollView>
+          <Button style={{bottom: 10, position: "absolute", alignSelf: "center"}}>POST</Button>
         </Modal>
+
       </SafeAreaView>
     )
   }
@@ -192,10 +212,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: StatusBar.currentHeight,
+   
     
   },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    bottom: 30
+  },
   scrollView: {
-   centerContent: true
+   centerContent: true,
+   height: "100%",
   },
   inputView: {
     backgroundColor: "#4D5749",
@@ -235,12 +265,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontFamily: "Roboto_400Regular",
     marginLeft: 15,
+    marginBottom: 100,
   },
   photoIcon:{
-    marginTop: 100
+    marginRight: 10,
+    top: 30
   },
   videoIcon: {
-    marginTop: 100
+    marginLeft: 10,
+    top: 30
+    
+  },
+  linkIcon: {
+    top:30,
+    marginLeft: 10
+
+    
   },
   cardStyle: {
     marginTop: 16,
@@ -250,6 +290,12 @@ const styles = StyleSheet.create({
   },
   flatListStyle: {
     marginTop: 12,
+  },
+  pickerTitle: {
+    marginBottom: 0,
+    bottom: 0,
+    alignSelf: "center",
+
   }
  
  

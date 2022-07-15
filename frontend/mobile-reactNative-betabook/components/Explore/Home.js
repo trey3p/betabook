@@ -32,9 +32,10 @@ export default function Home() {
 
   
   return (
-
     <View style={styles.container}>
-       <Image style = {styles.image} source = {require("../../assets/betabook-logo.png")}/>
+      <Image style = {styles.image} source = {require("../../assets/betabook-logo.png")}/>
+    <View style={styles.upperContainer}>
+       
         <Card style={styles.exploreCard}>
           <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
           <Card.Section
@@ -51,9 +52,28 @@ export default function Home() {
             
           />
         </Card>
+        
       
     </View>
-    
+    <View style={styles.lowerContainer}>
+      <Card style={styles.libraryCard}>
+          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Section
+            content={[{text: 'Your Library!', text70: true, grey10: true}]}
+            contentStyle={{alignItems: 'center'}}
+            
+          />
+        </Card>
+        <Card style={styles.newsCard}>
+          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Section
+            content={[{text: 'News!', text70: true, grey10: true}]}
+            contentStyle={{alignItems: 'center'}}
+            
+          />
+        </Card>
+    </View>
+    </View>
 
   )
 };
@@ -65,8 +85,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'column',
+    
   },
+  upperContainer: {flex: 1, marginTop: 100},
+  lowerContainer: {flex: 1},
+
   image: {
     position: 'absolute',
     top: 60,
@@ -74,14 +98,26 @@ const styles = StyleSheet.create({
     
   },
   exploreCard: {
-    marginRight: 10,
-    bottom: 70
+    position: "absolute",
+    right: 20,
+    bottom: 50,
     
     
   },
   geoCard: {
-   marginLeft: 10,
-   bottom: 70
+    position: "absolute",
+    left: 20,
+    bottom: 50,
+  },
+  libraryCard: {
+    position: "absolute",
+    left: 20,
+    bottom: 100,
+  },
+  newsCard: {
+    position: "absolute",
+    right: 20,
+    bottom: 100,
   }
 });
 
