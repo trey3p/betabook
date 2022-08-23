@@ -1,8 +1,7 @@
 
-
 import React, { useState } from 'react';
-import {Text, View, StatusBar, ScrollView, SafeAreaView, TextInput, StyleSheet, Modal, FlatList} from 'react-native';
-
+import { Text, View, StatusBar, ScrollView, SafeAreaView, TextInput, StyleSheet, Modal, FlatList, Image} from 'react-native';
+import * as ImagePicker from "expo-image-picker";
 import { Picker } from '@react-native-picker/picker';
 import {climbTypeOptions, climbGradeOptions, boulderGradeOptions} from '../Utilities/gradeTypeList';
 import SearchBar from "react-native-dynamic-search-bar";
@@ -28,7 +27,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 //import { Searchbar } from "react-native-paper";
 import { fetchRoutes } from "../Utilities/fetchRoutes";
-
+import {uploadImageAsync} from "../Utilities/uploadImage";
 
 
 export default function Post({route, navigation}) {
@@ -37,6 +36,11 @@ export default function Post({route, navigation}) {
   *
   *
   */
+
+
+
+
+
   const {userToken} = route.params;
   const climbRoutes = fetchRoutes(userToken);
   
@@ -58,6 +62,9 @@ export default function Post({route, navigation}) {
   const [photos, setPhotos] = useState([])
   const [postModalVisible, setPostModalVisible] = useState(false)
   const [routeSelected, setRouteSelected] = useState("")
+  const [image, setImage] = useState("")
+  const [videos, setVideos] = useState([])
+  const [uploading, setUploading] = useState(false)
 
 
   let [fontsLoaded] = useFonts({
@@ -76,9 +83,86 @@ export default function Post({route, navigation}) {
   });
 
 
+  async function pickImage() {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+   
+
+    
+
+    handleImagePicked(result);
+  };
+
+
+  async function handleImagePicked(pickerResult) {
+    try {
+      setUploading(true);
+
+      if (!pickerResult.cancelled) {
+        const uploadUrl = await uploadImageAsync(pickerResult.uri);
+        console.log(uploadUrl);
+        setImage(uploadUrl);
+      }
+    } catch (e) {
+      console.log(e);
+      alert("Upload failed, sorry :(");
+    } finally {
+      setUploading(false);
+      
+    }
+  };
+
+  function maybeRenderUploadingOverlay() {
+    if (uploading) {
+      console.log("in uploading")
+      return (
+        <SplashScreen/>
+      );
+    }
+  };
+
+  function maybeRenderImage() {
+    console.log("in maybe render image")
+    console.log(image)
+    if (!image) {
+      return;
+    }
+
+    return (
+      <View
+        style={{
+          marginTop: 30,
+          width: 250,
+          borderRadius: 3,
+          elevation: 2,
+        }}
+      >
+        <View
+          style={{
+            borderTopRightRadius: 3,
+            borderTopLeftRadius: 3,
+            shadowColor: "rgba(0,0,0,1)",
+            shadowOpacity: 0.2,
+            shadowOffset: { width: 4, height: 4 },
+            shadowRadius: 5,
+            overflow: "hidden",
+          }}
+        >
+          <Image source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} style={{ width: 250, height: 250 }} />
+        </View>
+      </View>
+    );
+  };
+
   async function filterList(text) {
     var newData = await fetchRoutes(userToken);
-    console.log(newData);
+    
     newData = await newData.filter((item) => {
       
       const itemData = item.name.toLowerCase();
@@ -131,6 +215,7 @@ export default function Post({route, navigation}) {
   else { 
     return (
       <SafeAreaView style = {styles.container}>
+      
         <View contentContainerStyle={styles.container}>
         <StatusBar barStyle={"light-content"} />
             <SearchBar
@@ -153,6 +238,7 @@ export default function Post({route, navigation}) {
                   renderItem={({ item }) => renderItem(item)}
                 />
             </View>
+            
             <MaterialIcons style={styles.next} name="navigate-next" size={72} color="forestgreen" onPress={() => setPostModalVisible(!postModalVisible)}/>
         </View>
         <Modal
@@ -173,8 +259,14 @@ export default function Post({route, navigation}) {
               style = {styles.bodyInput}
               multiline={true}
             >
-
+              {
+              maybeRenderUploadingOverlay()
+              }
+              
             </TextInput>
+            {
+                maybeRenderImage()
+              }
             <Text style={styles.pickerTitle}>Grade</Text>
             <Picker
             style={{marginTop: 0}}
@@ -190,7 +282,7 @@ export default function Post({route, navigation}) {
             </Picker>
             
               <View style = {styles.buttonContainer}>
-                <MaterialIcons style = {styles.photoIcon} name="add-a-photo" size={27} color="black" />
+                <MaterialIcons style = {styles.photoIcon} name="add-a-photo" size={27} color="black" onPress={() => pickImage()}/>
                 <Ionicons style = {styles.videoIcon} name="videocam" size={32} color="black" />
                 <Ionicons style = {styles.linkIcon} name="link" size={32} color="black" />
               </View>
@@ -300,43 +392,3 @@ const styles = StyleSheet.create({
  
  
 });
-
-// Old
-/*{ <Text style={styles.title}>
-Route
-</Text>
-<Searchbar
-placeholder="Search"
-onChangeText={onChangeSearch}
-value={searchQuery}
-/>
-<View style = {styles.inputView}>
-
-<TextInput style = {styles.TextInput}
-  placeholder = "Grading"
-/>
-
-</View>
-<Picker
- selectedValue = {climbType}
- prompt={'Climb Type'}
- 
- onValueChange={(value, index) => setClimbType(value)}
- 
->
-   {climbTypeOptions.map( (option, i) => (
-    <Picker.Item key = {option.value} value={option.value} label={option.label} />
-  ))}
-</Picker>
-<Picker
- selectedValue = {grade}
- prompt={'Climb Type'}
- 
- onValueChange={(value, index) => setGrade(value)}
- 
->
-
-   {
-    renderGrades()
-  }
-</Picker> }*/

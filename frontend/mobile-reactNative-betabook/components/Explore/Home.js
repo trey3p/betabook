@@ -45,9 +45,9 @@ export default function Home() {
           />
         </Card>
         <Card style={styles.geoCard}>
-          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Image source={{uri: 'https://c1.wallpaperflare.com/preview/239/4/949/compass-hand-holding-hold.jpg'}} height={200} width={150}/>
           <Card.Section
-            content={[{text: 'Climbs near you!', text70: true, grey10: true}]}
+            content={[{text: 'Find Climbs!', text70: true, grey10: true}]}
             contentStyle={{alignItems: 'center'}}
             
           />
@@ -57,7 +57,7 @@ export default function Home() {
     </View>
     <View style={styles.lowerContainer}>
       <Card style={styles.libraryCard}>
-          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Image source={{uri: 'https://d3byf4kaqtov0k.cloudfront.net/p/news/cfcp0nai.jpg'}} height={200} width={150}/>
           <Card.Section
             content={[{text: 'Your Library!', text70: true, grey10: true}]}
             contentStyle={{alignItems: 'center'}}
@@ -65,7 +65,7 @@ export default function Home() {
           />
         </Card>
         <Card style={styles.newsCard}>
-          <Card.Image source={{uri: 'https://www.climbing.com/wp-content/uploads/2018/05/cred-ken-etzel.jpg'}} height={200} width={150}/>
+          <Card.Image source={{uri: 'https://www.lasportiva.com/media/Ambassador/Adam_Ondra_Change_9b_Hanshelleren_-_Flatanger_Norway__credits_Petr_Pavlicek_2.jpg'}} height={200} width={150}/>
           <Card.Section
             content={[{text: 'News!', text70: true, grey10: true}]}
             contentStyle={{alignItems: 'center'}}
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     
   },
-  upperContainer: {flex: 1, marginTop: 100},
+  upperContainer: {flex: 1, marginTop: 90},
   lowerContainer: {flex: 1},
 
   image: {
